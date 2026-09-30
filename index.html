@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FlowPilot – AI-põhine projektijuhtimise tööriist">
+  <title>FlowPilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="FlowPiloti avaleht">
+        <span class="brand-mark">F</span><span>FlowPilot</span>
+      </a>
+      <nav aria-label="Peamenüü">
+        <p class="nav-label">Töölaud</p>
+        <button class="nav-item active" data-view="overview"><span>⌂</span> Ülevaade</button>
+        <button class="nav-item" data-view="tasks"><span>✓</span> Ülesanded <b id="navTaskCount">0</b></button>
+        <button class="nav-item" data-view="backlog"><span>☷</span> Backlog</button>
+        <button class="nav-item" data-view="ai"><span>✦</span> AI soovitused <i id="suggestionDot"></i></button>
+      </nav>
+      <div class="sidebar-project">
+        <p class="nav-label">Projekt</p>
+        <button class="project-switcher"><span class="project-icon">W</span><span><b>Veebiplatvorm</b><small>Aktiivne sprint</small></span><span>⌄</span></button>
+      </div>
+      <div class="profile">
+        <span class="avatar">ML</span>
+        <span><b>Mari-Liis</b><small>Projektijuht</small></span>
+        <button title="Seaded">•••</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">F</span><b>FlowPilot</b></div>
+        <label class="search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Otsi ülesandeid..." aria-label="Otsi ülesandeid"></label>
+        <div class="top-actions">
+          <button class="icon-button" id="themeButton" title="Muuda teemat">☼</button>
+          <button class="icon-button notification" title="Teavitused">♢<i></i></button>
+          <button class="primary-button" id="addTaskTop">＋ Lisa ülesanne</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="view active" id="overviewView">
+          <div class="page-heading">
+            <div><p class="eyebrow">KOLMAPÄEV, 30. SEPTEMBER</p><h1>Tere hommikust, Mari-Liis!</h1><p>Siin on sinu projekti tänane seis.</p></div>
+            <button class="secondary-button" id="exportButton">⇩ Ekspordi</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-icon purple">✓</div><div><span>Teha</span><strong id="todoStat">0</strong><small id="todoDelta">Aktiivsed ülesanded</small></div></article>
+            <article class="stat-card"><div class="stat-icon blue">↻</div><div><span>Töös</span><strong id="progressStat">0</strong><small>Hetkel käsil</small></div></article>
+            <article class="stat-card"><div class="stat-icon green">⌁</div><div><span>Valmis</span><strong id="doneStat">0</strong><small id="completionStat">0% lõpetatud</small></div></article>
+            <article class="stat-card"><div class="stat-icon red">!</div><div><span>Blokeeritud</span><strong id="blockedStat">0</strong><small>Vajavad tähelepanu</small></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel task-panel">
+              <div class="panel-header"><div><h2>Minu ülesanded</h2><p>Sinu järgmised prioriteedid</p></div><button class="text-button" data-go="tasks">Vaata kõiki →</button></div>
+              <div id="myTasks" class="compact-tasks"></div>
+            </section>
+            <section class="panel progress-panel">
+              <div class="panel-header"><div><h2>Sprint 8</h2><p>23. sept – 6. okt</p></div><span class="status-pill">Käimas</span></div>
+              <div class="donut-wrap"><div class="donut" id="sprintDonut"><div><strong id="sprintPercent">0%</strong><span>valmis</span></div></div></div>
+              <div class="progress-legend"><span><i class="green-bg"></i>Valmis <b id="legendDone">0</b></span><span><i class="blue-bg"></i>Töös <b id="legendProgress">0</b></span><span><i class="gray-bg"></i>Teha <b id="legendTodo">0</b></span></div>
+            </section>
+          </div>
+
+          <section class="panel ai-highlight">
+            <div class="ai-symbol">✦</div>
+            <div><div class="ai-title"><span>FLOWPILOT AI</span><small>Analüüsitud just praegu</small></div><h2 id="aiHeadline">Projekt liigub heas tempos</h2><p id="aiSummary">Analüüsin projekti seisu…</p></div>
+            <button class="secondary-button" data-go="ai">Vaata soovitusi →</button>
+          </section>
+
+          <section class="panel activity-panel">
+            <div class="panel-header"><div><h2>Viimased tegevused</h2><p>Mis projektis toimub</p></div></div>
+            <div id="activityList"></div>
+          </section>
+        </section>
+
+        <section class="view" id="tasksView">
+          <div class="page-heading"><div><p class="eyebrow">TÖÖVOOG</p><h1>Ülesanded</h1><p>Halda, filtreeri ja vii töö lõpuni.</p></div><button class="primary-button add-task">＋ Lisa ülesanne</button></div>
+          <div class="toolbar panel">
+            <label class="search task-search"><span>⌕</span><input id="taskSearch" type="search" placeholder="Otsi pealkirja või kirjelduse järgi"></label>
+            <select id="statusFilter" aria-label="Filtreeri staatuse järgi"><option value="all">Kõik staatused</option><option value="todo">Teha</option><option value="progress">Töös</option><option value="done">Valmis</option><option value="blocked">Blokeeritud</option></select>
+            <select id="priorityFilter" aria-label="Filtreeri prioriteedi järgi"><option value="all">Kõik prioriteedid</option><option value="high">Kõrge</option><option value="medium">Keskmine</option><option value="low">Madal</option></select>
+          </div>
+          <div class="panel table-panel"><div class="task-table-header"><span>Ülesanne</span><span>Vastutaja</span><span>Tähtaeg</span><span>Prioriteet</span><span>Staatus</span><span></span></div><div id="taskTable"></div><div id="emptyTasks" class="empty-state hidden"><b>Ülesandeid ei leitud</b><p>Muuda filtreid või lisa uus ülesanne.</p></div></div>
+        </section>
+
+        <section class="view" id="backlogView">
+          <div class="page-heading"><div><p class="eyebrow">PLANEERIMINE</p><h1>Backlog</h1><p>Prioriseeri tööd ja tuvasta sõltuvused.</p></div><button class="primary-button add-task">＋ Lisa ülesanne</button></div>
+          <div class="kanban" id="kanbanBoard"></div>
+        </section>
+
+        <section class="view" id="aiView">
+          <div class="page-heading"><div><p class="eyebrow">NUTIKAS ABILINE</p><h1>AI soovitused</h1><p>Reeglipõhine projekti analüüs ja järgmised sammud.</p></div><button class="secondary-button" id="refreshAi">↻ Analüüsi uuesti</button></div>
+          <div id="suggestions" class="suggestion-grid"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="taskDialog">
+    <form method="dialog" id="taskForm">
+      <div class="modal-header"><div><p class="eyebrow">ÜLESANNE</p><h2 id="dialogTitle">Lisa uus ülesanne</h2></div><button type="button" class="close-button" id="closeDialog">×</button></div>
+      <input type="hidden" id="taskId">
+      <label>Pealkiri *<input id="titleInput" required maxlength="80" placeholder="Näiteks: Loo avalehe prototüüp"></label>
+      <label>Kirjeldus<textarea id="descriptionInput" rows="3" maxlength="400" placeholder="Mida on vaja teha?"></textarea></label>
+      <div class="form-grid">
+        <label>Vastutaja<select id="assigneeInput"><option>Mari-Liis</option><option>Karl</option><option>Anna</option><option>Rasmus</option><option>Liisa</option></select></label>
+        <label>Tähtaeg<input id="deadlineInput" type="date"></label>
+        <label>Prioriteet<select id="priorityInput"><option value="high">Kõrge</option><option value="medium" selected>Keskmine</option><option value="low">Madal</option></select></label>
+        <label>Staatus<select id="statusInput"><option value="todo">Teha</option><option value="progress">Töös</option><option value="done">Valmis</option><option value="blocked">Blokeeritud</option></select></label>
+      </div>
+      <label>Sõltub ülesandest<select id="dependencyInput"><option value="">Sõltuvus puudub</option></select></label>
+      <div class="modal-actions"><button type="button" class="danger-button hidden" id="deleteTask">Kustuta</button><span></span><button type="button" class="secondary-button" id="cancelDialog">Tühista</button><button type="submit" class="primary-button">Salvesta ülesanne</button></div>
+    </form>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
