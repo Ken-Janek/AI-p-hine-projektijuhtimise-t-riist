@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="mockups.css">
 </head>
 <body>
   <div class="app-shell">
@@ -21,6 +22,7 @@
         <button class="nav-item active" data-view="overview"><span>⌂</span> Ülevaade</button>
         <button class="nav-item" data-view="tasks"><span>✓</span> Ülesanded <b id="navTaskCount">0</b></button>
         <button class="nav-item" data-view="backlog"><span>☷</span> Backlog</button>
+        <button class="nav-item" data-view="mockups"><span>◇</span> Mockupid</button>
         <button class="nav-item" data-view="ai"><span>✦</span> AI soovitused <i id="suggestionDot"></i></button>
       </nav>
       <div class="sidebar-project">
@@ -96,6 +98,25 @@
         <section class="view" id="backlogView">
           <div class="page-heading"><div><p class="eyebrow">PLANEERIMINE</p><h1>Backlog</h1><p>Prioriseeri tööd ja tuvasta sõltuvused.</p></div><button class="primary-button add-task">＋ Lisa ülesanne</button></div>
           <div class="kanban" id="kanbanBoard"></div>
+        </section>
+
+        <section class="view" id="mockupsView">
+          <div class="page-heading"><div><p class="eyebrow">LIVE PROTOTÜÜPIMINE</p><h1>Mockup Studio</h1><p>Muuda idee sekunditega klikitavaks kasutajaliideseks.</p></div><button class="secondary-button" id="newMockup">＋ Uus mockup</button></div>
+          <div class="mockup-layout">
+            <aside class="panel mockup-controls">
+              <div class="mockup-control-head"><span class="ai-symbol">✦</span><div><h2>Kirjelda soovitud vaadet</h2><p>AI loob live-eelvaate, mida saad täpsustada.</p></div></div>
+              <label class="control-label">Lähteülesanne backlog’ist<select id="mockupTask"><option value="">Uus idee (ilma ülesandeta)</option></select></label>
+              <label class="control-label">Vaate kirjeldus<textarea id="mockupPrompt" rows="6" placeholder="Näiteks: Loo kaasaegne sisselogimisvaade lilla gradiendi, e-posti ja parooli väljade ning Google'i nupuga."></textarea></label>
+              <div class="prompt-chips"><button data-prompt="dashboard">Analüütika töölaud</button><button data-prompt="login">Sisselogimine</button><button data-prompt="pricing">Hinnastamine</button></div>
+              <button class="primary-button generate-button" id="generateMockup">✦ Genereeri live-mockup</button>
+              <div class="iteration-box hidden" id="iterationBox"><label class="control-label">Täpsusta olemasolevat mockup’i<textarea id="refinePrompt" rows="3" placeholder="Näiteks: Muuda põhivärv roheliseks ja lisa statistika kaart."></textarea></label><button class="secondary-button" id="refineMockup">↻ Rakenda muudatus</button></div>
+              <div class="mockup-history"><div class="mockup-history-title"><b>Versioonid</b><span id="versionCount">0</span></div><div id="versionList"><p class="muted-copy">Versioonid ilmuvad pärast genereerimist.</p></div></div>
+            </aside>
+            <section class="panel preview-panel">
+              <div class="preview-toolbar"><div class="traffic-lights"><i></i><i></i><i></i></div><div class="device-switcher" role="group" aria-label="Eelvaate suurus"><button class="active" data-device="desktop" title="Desktop">▰</button><button data-device="tablet" title="Tahvel">▣</button><button data-device="mobile" title="Mobiil">▯</button></div><div class="preview-actions"><span><i></i> Live-eelvaade</span><button id="openPreview" title="Ava uuel vahelehel">↗</button></div></div>
+              <div class="preview-stage" id="previewStage"><div class="preview-empty" id="previewEmpty"><div>◇</div><h2>Sinu mockup ilmub siia</h2><p>Vali backlog’i ülesanne või kirjelda vasakul uut vaadet.</p></div><iframe id="mockupFrame" class="hidden" title="Genereeritud mockup" sandbox="allow-scripts"></iframe></div>
+            </section>
+          </div>
         </section>
 
         <section class="view" id="aiView">

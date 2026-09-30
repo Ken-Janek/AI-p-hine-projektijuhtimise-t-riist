@@ -18,10 +18,20 @@ Seejärel ava <http://localhost:8080>.
 - staatus, prioriteet, vastutaja, tähtaeg ja ülesannetevaheline sõltuvus;
 - otsing ning staatuse ja prioriteedi filtrid;
 - backlog'i Kanban-vaade ja blokeeringute visualiseerimine;
+- live-mockup'ide loomine backlog'i ülesandest või vabast prompt'ist;
+- mockup'i iteratiivne täpsustamine, versioonide ajalugu ning desktopi, tahvli ja mobiili eelvaade;
 - reeglipõhised AI-soovitused tähtaegade, blokeeringute, prioriteetide ja koormuse põhjal;
 - töölaua statistika, sprindi edenemine ja tegevuste ajalugu;
 - CSV eksport, tume teema ja responsiivne kujundus;
 - andmete salvestamine brauseri `localStorage`-isse.
+
+## Automaattest
+
+Kui Edge on käivitatud CDP pordil `9222` ja rakendus töötab pordil `8080`, käivita täielik brauseri suitsutest:
+
+```powershell
+node tests/browser-smoke.mjs
+```
 
 ## Tehniline märkus
 
