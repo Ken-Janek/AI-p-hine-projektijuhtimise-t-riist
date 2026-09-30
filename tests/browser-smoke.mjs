@@ -1,5 +1,4 @@
 const endpoint = process.env.CDP_URL || 'http://127.0.0.1:9222';
-const appUrl = process.env.APP_URL || 'http://127.0.0.1:8080';
 const targets = await (await fetch(`${endpoint}/json`)).json();
 const page = targets.find(target => target.type === 'page');
 if (!page) throw new Error('A browser page target was not found');
@@ -53,8 +52,8 @@ async function waitFor(expression, timeout = 60000) {
 
 await command('Runtime.enable');
 await command('Page.enable');
-if (!page.url.startsWith(appUrl)) {
-  await command('Page.navigate', { url: appUrl });
+if (!page.url.includes('127.0.0.1:8080')) {
+  await command('Page.navigate', { url: 'http://127.0.0.1:8080' });
   await new Promise(resolve => setTimeout(resolve, 500));
 }
 await evaluate(`localStorage.clear()`);

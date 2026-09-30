@@ -7,7 +7,7 @@ const app = express();
 const port = Number(process.env.PORT) || 8080;
 const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 const hasApiKey = Boolean(process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('lisa-oma'));
-const dataDirectory = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.resolve('data');
+const dataDirectory = path.resolve('data');
 const dataFile = path.join(dataDirectory, 'app-data.json');
 
 const text = (value, max) => typeof value === 'string' && value.length <= max;
@@ -48,16 +48,12 @@ function sanitizeMockupHtml(value) {
 
 app.disable('x-powered-by');
 app.use(express.json({ limit: '15mb' }));
-const publicFiles = new Set(['/', '/index.html', '/styles.css', '/mockups.css', '/crazyland-theme.css', '/app.js', '/health']);
+const publicFiles = new Set(['/', '/index.html', '/styles.css', '/mockups.css', '/crazyland-theme.css', '/app.js']);
 app.use((request, response, next) => {
   if (request.path.startsWith('/api/') || publicFiles.has(request.path)) return next();
   response.status(404).send('Lehte ei leitud.');
 });
 app.use(express.static('.', { dotfiles: 'deny', index: 'index.html' }));
-
-app.get('/health', (_request, response) => {
-  response.json({ status: 'ok' });
-});
 
 app.get('/api/ai-status', (_request, response) => {
   response.json({ enabled: hasApiKey, model: hasApiKey ? model : null });
@@ -144,8 +140,7 @@ app.use((request, response) => {
   response.status(404).send('Lehte ei leitud.');
 });
 
-app.listen(port, '0.0.0.0', () => {
-  const publicUrl = process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : `http://localhost:${port}`;
-  console.log(`FlowPilot: ${publicUrl}`);
+app.listen(port, '127.0.0.1', () => {
+  console.log(`FlowPilot: http://localhost:${port}`);
   console.log(hasApiKey ? `Gemini võti seadistatud (${model})` : 'AI offline – lisa GEMINI_API_KEY .env faili. Malligeneraator töötab edasi.');
 });

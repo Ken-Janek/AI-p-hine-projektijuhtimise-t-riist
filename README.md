@@ -29,7 +29,7 @@ GEMINI_MODEL=gemini-3.1-flash-lite
 npm start
 ```
 
-5. Kohalikus arenduses ava <http://localhost:8080>; Railwayl kasuta teenuse genereeritud avalikku domeeni.
+5. Ava <http://localhost:8080> ja vali külgmenüüst **Mockupid**.
 
 API-võti jääb ainult serverisse. `.env` on `.gitignore` failis ja seda ei lisata GitHubi. Kõik AI päringud käivad läbi serveri `/api/generate-mockup` endpointi. Mudelit saab muuta `GEMINI_MODEL` väärtusega; vaikimisi kasutatakse `gemini-3.1-flash-lite` mudelit Google Interactions API kaudu.
 
@@ -52,21 +52,11 @@ Kui API-võtit pole lisatud või AI teenus ei vasta, jätkab rakendus automaatse
 
 ## Automaattest
 
-Kui Edge on käivitatud CDP pordil `9222`, käivita täielik brauseri suitsutest. Railway domeeni testimiseks määra enne `APP_URL` keskkonnamuutuja.
+Kui Edge on käivitatud CDP pordil `9222` ja rakendus töötab pordil `8080`, käivita täielik brauseri suitsutest:
 
 ```powershell
 node tests/browser-smoke.mjs
 ```
-
-## Railway
-
-1. Impordi GitHubi repositoorium Railway projekti.
-2. Lisa teenuse muutujad `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-3.1-flash-lite` ja `NODE_ENV=production`.
-3. Ära määra `PORT` muutujat käsitsi; Railway lisab selle automaatselt.
-4. Lisa teenusele volume mount-path'iga `/app/data`, et ülesanded ja mockup'id säiliksid deploy'de vahel.
-5. Sea healthcheck path väärtuseks `/health` ja genereeri Settings → Networking alt avalik domeen.
-
-Rakendus kasutab Railway lisatud `RAILWAY_VOLUME_MOUNT_PATH` muutujat automaatselt.
 
 ## Tehniline märkus
 
