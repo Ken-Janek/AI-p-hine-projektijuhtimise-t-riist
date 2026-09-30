@@ -67,6 +67,7 @@ await evaluate(`
   document.querySelector('[data-prompt="login"]').click();
   document.querySelector('#generateMockup').click();
 `);
+await new Promise(resolve => setTimeout(resolve, 300));
 assert(await evaluate(`document.querySelector('#mockupsView').classList.contains('active')`), 'mockup navigation opens Mockup Studio');
 assert(await evaluate(`!document.querySelector('#mockupFrame').classList.contains('hidden') && document.querySelector('#mockupFrame').srcdoc.includes('Logi oma kontole')`), 'prompt generates a live login mockup');
 assert(await evaluate(`JSON.parse(localStorage.getItem('flowpilot-mockups-v1')).length === 1`), 'generated mockup is stored as version one');
@@ -74,6 +75,7 @@ await evaluate(`
   document.querySelector('#refinePrompt').value = 'Muuda põhivärv roheliseks';
   document.querySelector('#refineMockup').click();
 `);
+await new Promise(resolve => setTimeout(resolve, 300));
 assert(await evaluate(`document.querySelector('#versionCount').textContent === '2' && document.querySelector('#mockupFrame').srcdoc.includes('#16a66a')`), 'refinement creates a second green version');
 await evaluate(`document.querySelector('[data-device="mobile"]').click()`);
 assert(await evaluate(`document.querySelector('#previewStage').classList.contains('mobile')`), 'mobile preview mode is applied');

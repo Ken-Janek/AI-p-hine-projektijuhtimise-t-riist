@@ -2,15 +2,37 @@
 
 AI-põhise projektijuhtimise tööriista töötav frontend-MVP.
 
-## Käivitamine
+## Käivitamine päris AI-ga
 
-Rakendus ei vaja ehitamist ega väliseid sõltuvusi. Ava `index.html` brauseris või käivita kaustas lihtne veebiserver:
+1. Paigalda sõltuvused:
 
 ```powershell
-python -m http.server 8080
+npm install
 ```
 
-Seejärel ava <http://localhost:8080>.
+2. Tee `.env.example` failist koopia nimega `.env`:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+3. Ava `.env` ja asenda näidisväärtus enda OpenAI API võtmega:
+
+```text
+OPENAI_API_KEY=sk-...
+```
+
+4. Käivita rakendus:
+
+```powershell
+npm start
+```
+
+5. Ava <http://localhost:8080> ja vali külgmenüüst **Mockupid**.
+
+API-võti jääb ainult serverisse. `.env` on `.gitignore` failis ja seda ei lisata GitHubi. Mudelit saab muuta `OPENAI_MODEL` väärtusega; vaikimisi kasutatakse `gpt-5.4-mini` mudelit.
+
+Kui API-võtit pole lisatud või AI teenus ei vasta, jätkab rakendus automaatselt sisseehitatud offline-mallidega. Ühenduse olek kuvatakse Mockup Studio ülaosas.
 
 ## Funktsioonid
 
@@ -35,4 +57,4 @@ node tests/browser-smoke.mjs
 
 ## Tehniline märkus
 
-MVP töötab täielikult brauseris. Reeglipõhine soovitusmootor ei vaja API-võtit. Tootelahenduses saab selle asendada serveripoolse LLM-integratsiooniga ning lisada päris autentimise ja andmebaasi.
+Projektihalduse soovitused on reeglipõhised. Mockup Studio kasutab seadistatud OpenAI Responses API-t ning kukub vajadusel tagasi offline-mallidele. Tootelahenduses tuleks lisada päris autentimine, andmebaas, kasutajapõhine päringulimiit ja põhjalikum genereeritud HTML-i puhastamine.
