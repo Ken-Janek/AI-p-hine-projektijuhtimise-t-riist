@@ -145,6 +145,7 @@ app.use((request, response) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`FlowPilot: http://localhost:${port}`);
+  const publicUrl = process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : `http://localhost:${port}`;
+  console.log(`FlowPilot: ${publicUrl}`);
   console.log(hasApiKey ? `Gemini võti seadistatud (${model})` : 'AI offline – lisa GEMINI_API_KEY .env faili. Malligeneraator töötab edasi.');
 });
