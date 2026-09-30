@@ -2,7 +2,7 @@
 
 AI-põhise projektijuhtimise tööriista töötav frontend-MVP.
 
-## Käivitamine päris AI-ga
+## Käivitamine Gemini AI-ga
 
 1. Paigalda sõltuvused:
 
@@ -16,10 +16,11 @@ npm install
 Copy-Item .env.example .env
 ```
 
-3. Ava `.env` ja asenda näidisväärtus enda OpenAI API võtmega:
+3. Loo Google AI Studios Gemini API võti, ava `.env` ja asenda näidisväärtus:
 
 ```text
-OPENAI_API_KEY=sk-...
+GEMINI_API_KEY=...
+GEMINI_MODEL=gemini-3.1-flash-lite
 ```
 
 4. Käivita rakendus:
@@ -30,7 +31,7 @@ npm start
 
 5. Ava <http://localhost:8080> ja vali külgmenüüst **Mockupid**.
 
-API-võti jääb ainult serverisse. `.env` on `.gitignore` failis ja seda ei lisata GitHubi. Mudelit saab muuta `OPENAI_MODEL` väärtusega; vaikimisi kasutatakse `gpt-5.4-mini` mudelit.
+API-võti jääb ainult serverisse. `.env` on `.gitignore` failis ja seda ei lisata GitHubi. Kõik AI päringud käivad läbi serveri `/api/generate-mockup` endpointi. Mudelit saab muuta `GEMINI_MODEL` väärtusega; vaikimisi kasutatakse `gemini-3.1-flash-lite` mudelit Google Interactions API kaudu.
 
 Kui API-võtit pole lisatud või AI teenus ei vasta, jätkab rakendus automaatselt sisseehitatud offline-mallidega. Ühenduse olek kuvatakse Mockup Studio ülaosas.
 
@@ -45,7 +46,9 @@ Kui API-võtit pole lisatud või AI teenus ei vasta, jätkab rakendus automaatse
 - reeglipõhised AI-soovitused tähtaegade, blokeeringute, prioriteetide ja koormuse põhjal;
 - töölaua statistika, sprindi edenemine ja tegevuste ajalugu;
 - CSV eksport, tume teema ja responsiivne kujundus;
-- andmete salvestamine brauseri `localStorage`-isse.
+- ülesannete, tegevuste ja mockup'ide püsiv salvestamine serveri `data/app-data.json` faili;
+- serveripoolne sisendite ja AI vastuse struktuuri valideerimine;
+- AI HTML-i puhastamine ning skriptideta sandbox-eelvaade.
 
 ## Automaattest
 
@@ -57,4 +60,4 @@ node tests/browser-smoke.mjs
 
 ## Tehniline märkus
 
-Projektihalduse soovitused on reeglipõhised. Mockup Studio kasutab seadistatud OpenAI Responses API-t ning kukub vajadusel tagasi offline-mallidele. Tootelahenduses tuleks lisada päris autentimine, andmebaas, kasutajapõhine päringulimiit ja põhjalikum genereeritud HTML-i puhastamine.
+Projektihalduse soovitused on reeglipõhised. Mockup Studio kasutab seadistatud Gemini API-t ning kukub vajadusel tagasi offline-mallidele. Tootelahenduses tuleks lisada autentimine, mitme kasutaja andmebaas ja kasutajapõhine päringulimiit.

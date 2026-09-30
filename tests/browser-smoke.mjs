@@ -41,6 +41,15 @@ function assert(condition, message) {
   console.log(`PASS  ${message}`);
 }
 
+async function waitFor(expression, timeout = 60000) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    if (await evaluate(expression)) return true;
+    await new Promise(resolve => setTimeout(resolve, 250));
+  }
+  return false;
+}
+
 await command('Runtime.enable');
 await command('Page.enable');
 if (!page.url.includes('127.0.0.1:8080')) {
@@ -67,16 +76,16 @@ await evaluate(`
   document.querySelector('[data-prompt="login"]').click();
   document.querySelector('#generateMockup').click();
 `);
-await new Promise(resolve => setTimeout(resolve, 300));
 assert(await evaluate(`document.querySelector('#mockupsView').classList.contains('active')`), 'mockup navigation opens Mockup Studio');
-assert(await evaluate(`!document.querySelector('#mockupFrame').classList.contains('hidden') && document.querySelector('#mockupFrame').srcdoc.includes('Logi oma kontole')`), 'prompt generates a live login mockup');
-assert(await evaluate(`JSON.parse(localStorage.getItem('flowpilot-mockups-v1')).length === 1`), 'generated mockup is stored as version one');
+assert(await waitFor(`!document.querySelector('#generateMockup').disabled && localStorage.getItem('flowpilot-mockups-v1') && !document.querySelector('#mockupFrame').classList.contains('hidden') && document.querySelector('#mockupFrame').srcdoc.startsWith('<!doctype html>')`), 'prompt generates a live HTML mockup');
+assert(await evaluate(`!/<script\\b|\\son[a-z]+\\s*=|javascript:/i.test(document.querySelector('#mockupFrame').srcdoc)`), 'generated mockup contains no executable script');
+const firstVersionCount = await evaluate(`JSON.parse(localStorage.getItem('flowpilot-mockups-v1')).length`);
+assert(firstVersionCount >= 1, 'generated mockup is stored as a version');
 await evaluate(`
   document.querySelector('#refinePrompt').value = 'Muuda põhivärv roheliseks';
   document.querySelector('#refineMockup').click();
 `);
-await new Promise(resolve => setTimeout(resolve, 300));
-assert(await evaluate(`document.querySelector('#versionCount').textContent === '2' && document.querySelector('#mockupFrame').srcdoc.includes('#16a66a')`), 'refinement creates a second green version');
+assert(await waitFor(`Number(document.querySelector('#versionCount').textContent) === ${firstVersionCount + 1}`), 'refinement creates a second version');
 await evaluate(`document.querySelector('[data-device="mobile"]').click()`);
 assert(await evaluate(`document.querySelector('#previewStage').classList.contains('mobile')`), 'mobile preview mode is applied');
 
