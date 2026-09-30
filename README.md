@@ -58,6 +58,16 @@ Kui Edge on käivitatud CDP pordil `9222` ja rakendus töötab pordil `8080`, k�
 node tests/browser-smoke.mjs
 ```
 
+## Railway
+
+1. Impordi GitHubi repositoorium Railway projekti.
+2. Lisa teenuse muutujad `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-3.1-flash-lite` ja `NODE_ENV=production`.
+3. Ära määra `PORT` muutujat käsitsi; Railway lisab selle automaatselt.
+4. Lisa teenusele volume mount-path'iga `/app/data`, et ülesanded ja mockup'id säiliksid deploy'de vahel.
+5. Sea healthcheck path väärtuseks `/health` ja genereeri Settings → Networking alt avalik domeen.
+
+Rakendus kasutab Railway lisatud `RAILWAY_VOLUME_MOUNT_PATH` muutujat automaatselt.
+
 ## Tehniline märkus
 
 Projektihalduse soovitused on reeglipõhised. Mockup Studio kasutab seadistatud Gemini API-t ning kukub vajadusel tagasi offline-mallidele. Tootelahenduses tuleks lisada autentimine, mitme kasutaja andmebaas ja kasutajapõhine päringulimiit.
